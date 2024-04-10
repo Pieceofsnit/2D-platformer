@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -19,6 +15,7 @@ public class PlayerMover : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
     private Vector2 _moveVector;
+
     private readonly int _move = Animator.StringToHash("Speed");
     private readonly int _ground = Animator.StringToHash("IsGrounded");
     private string _horizontal = "Horizontal";
@@ -29,7 +26,7 @@ public class PlayerMover : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _checkGroundRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
-        Debug.Log(IsGrounded());
+
     }   
 
     private void Update()
@@ -56,7 +53,7 @@ public class PlayerMover : MonoBehaviour
 
     private void Jump()
     {
-        _animator.SetBool(_ground,IsGrounded());
+        _animator.SetTrigger(_ground);
         _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);
     }
 
