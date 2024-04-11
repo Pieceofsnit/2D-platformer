@@ -10,15 +10,16 @@ public class EnemyMover : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private float _speed;
 
+    private Quaternion _turnLeft = Quaternion.Euler(0f, 180f, 0f);
+    private Quaternion _turnRight = Quaternion.identity;
     private Transform _currentTarget;
-    private SpriteRenderer _spriteRenderer;
     private int _indexWaypoint = 0;
     private bool _isDiscovered;
+    private bool _isRotate;
     private float _minDistance = 0.5f;
 
     private void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _currentTarget = _waypoints[_indexWaypoint];
         _isDiscovered = false;
     }
@@ -56,7 +57,7 @@ public class EnemyMover : MonoBehaviour
     private void Follow()
     {
         _currentTarget = _player;
-        Flip();
+        Rotate();
     }
 
     private void Move()
@@ -71,8 +72,9 @@ public class EnemyMover : MonoBehaviour
         if (CheckDistance())
         {
             SwitchNext();
-            Flip(); 
         } 
+        
+        Rotate();
     }
 
     private void SwitchNext()
@@ -90,8 +92,13 @@ public class EnemyMover : MonoBehaviour
        return Vector2.Distance(transform.position, _currentTarget.position) < _minDistance;
     }
 
-    private void Flip()
+    private void Rotate()
     {
-        _spriteRenderer.flipX = transform.position.x > _currentTarget.position.x;
+        _isRotate = transform.position.x < _currentTarget.position.x;
+
+        if (_isRotate)
+            transform.localRotation = _turnRight;
+        else
+            transform.localRotation = _turnLeft;   
     }
 }

@@ -12,28 +12,26 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private Animator _animator;
 
-    private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
     private Vector2 _moveVector;
-
+    private Quaternion _turnLeft = Quaternion.Euler(0f, 180f, 0f);
+    private Quaternion _turnRight = Quaternion.identity;
     private readonly int _move = Animator.StringToHash("Speed");
     private readonly int _ground = Animator.StringToHash("IsGrounded");
     private string _horizontal = "Horizontal";
 
     private void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _checkGroundRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
-
     }   
 
     private void Update()
     {
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
         {
-            _spriteRenderer.flipX = _moveVector.x < 0;
+            Rotate(_moveVector.x);
         }
         
         Run();
@@ -60,5 +58,19 @@ public class PlayerMover : MonoBehaviour
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(_groundCheck.position, _checkGroundRadius, _groundMask);
+    }
+
+    private void Rotate(float velocityX)
+    {
+        switch (velocityX)
+        {
+            case > 0:
+                transform.localRotation = _turnRight;
+                break;
+
+            case < 0:
+                transform.localRotation = _turnLeft;
+                break;
+        }
     }
 }
