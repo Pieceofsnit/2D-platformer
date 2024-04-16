@@ -1,9 +1,8 @@
 using TMPro;
 using UnityEngine;
 
-public class HealthBarText : MonoBehaviour
-{
-    [SerializeField] private Health _health;
+public class HealthBarText : HealthBar
+{   
     [SerializeField] private TextMeshProUGUI _currentHealth;
     [SerializeField] private TextMeshProUGUI _maxHealth;
 
@@ -13,7 +12,7 @@ public class HealthBarText : MonoBehaviour
         _maxHealth.text = _health.Value.ToString();
     }
 
-    private void OnHealthChanged(float health)
+    protected override void OnHealthChanged(float health)
     {
         _currentHealth.text = health.ToString();
     }

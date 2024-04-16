@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -8,29 +9,25 @@ public class PlayerAttacker : MonoBehaviour
     [SerializeField] private LayerMask _enemyLayer;
     [SerializeField] private float _range;
     [SerializeField] private float _damage;
-    [SerializeField] private float _startTimeCounter = 1f;
+    [SerializeField] private float _delay = 1f;
     [SerializeField] private Animator _animator;
 
     private readonly int _attack = Animator.StringToHash("Attack");
-    private float _timeCounter;
-
-    private void Start()
-    {
-        _timeCounter = _startTimeCounter;
-    }
+    private Coroutine _coroutine;
+    private float _timeAttack;
+    private bool _isRunner = true;
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.F) && _timeCounter <= 0)
+        if (Input.GetKey(KeyCode.F) && _isRunner == true)
         {
-            Attack();
-            _animator.SetTrigger(_attack);
-            _timeCounter = _startTimeCounter;
-        }
+            if(_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
 
-        if (_timeCounter > 0)
-        {
-            _timeCounter -= Time.deltaTime;
+            _coroutine = StartCoroutine(WaitForDamage());
+            _animator.SetTrigger(_attack);
         }
     }
 
@@ -40,10 +37,19 @@ public class PlayerAttacker : MonoBehaviour
 
         foreach(Collider2D enemy in enemies)
         {
-            if ((enemy.TryGetComponent(out Health enemyHealth)))
+            if (enemy.TryGetComponent(out Health enemyHealth))
             {
                 enemyHealth.TakeDamage(_damage);
             }
         }
+    }
+
+    private IEnumerator WaitForDamage()
+    {
+        _isRunner = false;
+        yield return new WaitForSeconds(_delay);
+        _isRunner = true;
+        Attack();
+        Debug.Log("Attack");  
     }
 }
