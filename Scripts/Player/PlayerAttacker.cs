@@ -48,7 +48,6 @@ public class PlayerAttacker : MonoBehaviour
         _isRunner = false;
         yield return new WaitForSeconds(_delay);
         _isRunner = true;
-        Attack();
-        Debug.Log("Attack");  
+        Attack(); 
     }
 }
