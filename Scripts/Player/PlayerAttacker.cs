@@ -14,7 +14,6 @@ public class PlayerAttacker : MonoBehaviour
 
     private readonly int _attack = Animator.StringToHash("Attack");
     private Coroutine _coroutine;
-    private float _timeAttack;
     private bool _isRunner = true;
 
     private void Update()
