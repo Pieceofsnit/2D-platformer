@@ -8,7 +8,6 @@ public  class HealthBarSlider : HealthBar
     [SerializeField] private float _recoveryRate;
 
     private Coroutine _changeBar;
-    private float _healthBar;
 
     private void OnEnable()
     {
@@ -24,21 +23,24 @@ public  class HealthBarSlider : HealthBar
     {
         _slider.maxValue = _health.Value;
         _slider.value = _health.Value;
-        _healthBar = _health.Value;
     }
 
     protected override void  OnHealthChanged(float health)
     {
-        _changeBar = StartCoroutine(ChangeHealthBar(health));
+        if(_changeBar != null)
+        {
+            StopCoroutine(_changeBar);
+        }
+
+        _changeBar = StartCoroutine(ChangingHealthBar(health));
     }
 
-    private IEnumerator ChangeHealthBar(float health)
+    private IEnumerator ChangingHealthBar(float health)
     {
-        _healthBar = health;
-        while (_healthBar != _slider.value)
+        while (health != _slider.value)
         {
-            Debug.Log("Жизни " + _healthBar);
-            _slider.value = Mathf.MoveTowards(_slider.value, _healthBar, _recoveryRate * Time.deltaTime);
+            Debug.Log("Жизни " + health);
+            _slider.value = Mathf.MoveTowards(_slider.value, health, _recoveryRate * Time.deltaTime);
             yield return null;
         }
     }

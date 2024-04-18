@@ -19,18 +19,18 @@ public class Health: MonoBehaviour
     public void TakeDamage(float damage)
     {
         _value -= damage;
-        CheckedLife();
+        ValidateLife();
         HealthChanged?.Invoke(_value);
     }
 
     public void Restore (float health)
     {
         _value += health;
-        CheckedLife();
+        ValidateLife();
         HealthChanged?.Invoke(_value);
     }
 
-    private void CheckedLife()
+    private void ValidateLife()
     {
         _value = Mathf.Clamp(_value, 0, _maxValue);
     }
