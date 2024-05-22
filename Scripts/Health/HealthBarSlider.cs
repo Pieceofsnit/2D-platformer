@@ -2,27 +2,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public  class HealthBarSlider : HealthBar
+public  class HealthBarSlider : HealthView
 {
     [SerializeField] private Slider _slider;
     [SerializeField] private float _recoveryRate;
 
     private Coroutine _changeBar;
 
-    private void OnEnable()
-    {
-        _health.HealthChanged += OnHealthChanged;
-    }
-
-    private void OnDisable()
-    {
-        _health.HealthChanged -= OnHealthChanged;
-    }
-
     public void Start()
     {
-        _slider.maxValue = _health.Value;
-        _slider.value = _health.Value;
+        _slider.maxValue = Health.Value;
+        _slider.value = Health.Value;
     }
 
     protected override void  OnHealthChanged(float health)
@@ -37,10 +27,12 @@ public  class HealthBarSlider : HealthBar
 
     private IEnumerator ChangingHealthBar(float health)
     {
-        while (health != _slider.value)
+        float value = _slider.value;
+
+        while (Health.Value != value)
         {
-            Debug.Log("Жизни " + health);
-            _slider.value = Mathf.MoveTowards(_slider.value, health, _recoveryRate * Time.deltaTime);
+            value = Mathf.Lerp(value, health, _recoveryRate * Time.deltaTime);
+            _slider.value = value;
             yield return null;
         }
     }

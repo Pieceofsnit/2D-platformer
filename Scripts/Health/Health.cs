@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,20 +16,17 @@ public class Health: MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _value -= damage;
-        ValidateLife();
-        HealthChanged?.Invoke(_value);
+        ChangeHealth(- damage);
     }
 
     public void Restore (float health)
     {
-        _value += health;
-        ValidateLife();
-        HealthChanged?.Invoke(_value);
+        ChangeHealth(health);
     }
 
-    private void ValidateLife()
+    private void ChangeHealth(float value)
     {
-        _value = Mathf.Clamp(_value, 0, _maxValue);
+        _value = Mathf.Clamp(_value += value, 0, _maxValue);
+        HealthChanged?.Invoke(_value);
     }
 }

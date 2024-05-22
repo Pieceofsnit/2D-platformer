@@ -8,7 +8,7 @@ public class СollectingHealthСoins : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<HealthCoin>(out HealthCoin health))
+        if (collision.TryGetComponent<LifePoint>(out LifePoint health))
         {
             _health.Restore(health.HealthBonus);
         }

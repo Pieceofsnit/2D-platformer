@@ -13,7 +13,6 @@ public class EnemyAttacker : MonoBehaviour
     private Coroutine _coroutine;
     private readonly int _attacked = Animator.StringToHash("Attacked");
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.collider.TryGetComponent<Player>(out Player player) && _damage > 0)
@@ -22,6 +21,7 @@ public class EnemyAttacker : MonoBehaviour
             _coroutine = StartCoroutine(WaitForDamage(player));
         }
     }
+
     private void Attack(Player player)
     {
         player.GetComponent<Health>().TakeDamage(_damage);

@@ -24,7 +24,7 @@ public class PlayerAttacker : MonoBehaviour
             {
                 StopCoroutine(_coroutine);
             }
-
+            
             _coroutine = StartCoroutine(WaitForDamage());
             _animator.SetTrigger(_attack);
         }
