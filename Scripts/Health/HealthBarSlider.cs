@@ -27,13 +27,17 @@ public  class HealthBarSlider : HealthView
 
     private IEnumerator ChangingHealthBar(float health)
     {
-        float value = _slider.value;
+        float sliderValue = _slider.value;
+        float delay = 1f;
 
-        while (Health.Value != value)
+        for (float i = 0; i < delay; i += _recoveryRate * Time.deltaTime)
         {
-            value = Mathf.Lerp(value, health, _recoveryRate * Time.deltaTime);
-            _slider.value = value;
+            Debug.Log("sss");
             yield return null;
+
+            _slider.value = Mathf.Lerp(sliderValue, health, i);
         }
+
+        _slider.value = health;
     }
 }
