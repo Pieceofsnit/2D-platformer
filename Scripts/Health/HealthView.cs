@@ -9,6 +9,7 @@ public abstract class HealthView : MonoBehaviour
     protected void OnEnable()
     {
         Health.HealthChanged += OnHealthChanged;
+
     }
 
     protected void OnDisable()
@@ -17,4 +18,5 @@ public abstract class HealthView : MonoBehaviour
     }
 
     protected abstract void OnHealthChanged(float health);
+
 }

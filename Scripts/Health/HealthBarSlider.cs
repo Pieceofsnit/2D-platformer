@@ -32,7 +32,6 @@ public  class HealthBarSlider : HealthView
 
         for (float i = 0; i < delay; i += _recoveryRate * Time.deltaTime)
         {
-            Debug.Log("sss");
             yield return null;
 
             _slider.value = Mathf.Lerp(sliderValue, health, i);
