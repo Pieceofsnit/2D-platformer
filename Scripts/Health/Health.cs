@@ -29,5 +29,15 @@ public class Health: MonoBehaviour
     {
         _value = Mathf.Clamp(_value += value, 0, _maxValue);
         HealthChanged?.Invoke(_value);
+
+        if(_value <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

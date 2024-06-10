@@ -15,22 +15,16 @@ public class EnemyAttacker : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.TryGetComponent<Player>(out Player player) && _damage > 0)
+        if(collision.collider.TryGetComponent(out Player player) && _damage > 0)
         { 
             _isRunner = true;
             _coroutine = StartCoroutine(WaitForDamage(player));
         }
     }
 
-    private void Attack(Player player)
-    {
-        player.GetComponent<Health>().TakeDamage(_damage);
-        _animator.SetTrigger(_attacked);
-    }
-
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.TryGetComponent<Player>(out Player player) && _damage > 0)
+        if (collision.collider.TryGetComponent(out Player player) && _damage > 0)
         {
             if(_coroutine != null)
             _isRunner = false;
@@ -47,5 +41,11 @@ public class EnemyAttacker : MonoBehaviour
             Attack(player);
             yield return wait;
         }
+    }
+
+    private void Attack(Player player)
+    {
+        player.GetComponent<Health>().TakeDamage(_damage);
+        _animator.SetTrigger(_attacked);
     }
 }

@@ -8,9 +8,10 @@ public class СollectingHealthСoins : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<LifePoint>(out LifePoint health))
+        if (collision.TryGetComponent<LifePoint>(out LifePoint lifePoint))
         {
-            _health.Restore(health.HealthBonus);
+            _health.Restore(lifePoint.HealthBonus);
+            Destroy(lifePoint.gameObject);
         }
     }
 }
