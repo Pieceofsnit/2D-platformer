@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealthPicker : MonoBehaviour
 {
-    [SerializeField] private Player _health;
+    [SerializeField] private Health _healthPlayer;
     [SerializeField] private LayerMask _layerMaskEnemy;
 
     private Collider2D _collider;
@@ -24,7 +24,7 @@ public class HealthPicker : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out Enemy enemy))
+        if (collision.TryGetComponent(out Health enemyHealth))
         {
             if (_coroutine != null)
             {
@@ -34,15 +34,14 @@ public class HealthPicker : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitForStealHealth(Enemy enemy)
+    private IEnumerator WaitForStealHealth(Health enemyHealth)
     {
-        
         var wait = new WaitForSeconds(_delay);
         _isRunner = false;
 
         for (int i = 0; i < _duration; i++)
         {
-            StealHealth(enemy);
+            StealHealth(enemyHealth);
             yield return wait;
         }
 
@@ -53,20 +52,20 @@ public class HealthPicker : MonoBehaviour
     {
         _collider = Physics2D.OverlapCircle(transform.position, _radius, _layerMaskEnemy);
 
-        if (_collider.TryGetComponent(out Enemy enemy))
+        if (_collider.TryGetComponent(out Health enemyHealth))
         {
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
             }
 
-            _coroutine = StartCoroutine(WaitForStealHealth(enemy));
+            _coroutine = StartCoroutine(WaitForStealHealth(enemyHealth));
         }
     }
 
-    private void StealHealth(Enemy enemy)
+    private void StealHealth(Health enemyHealth)
     {
-        enemy.GetComponent<Health>().TakeDamage(_stolenHealth);
-        _health.GetComponent<Health>().Restore(_stolenHealth);
+        enemyHealth.TakeDamage(_stolenHealth);
+        _healthPlayer.Restore(_stolenHealth);
     }
 }
