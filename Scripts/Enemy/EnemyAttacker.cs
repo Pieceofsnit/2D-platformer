@@ -12,19 +12,19 @@ public class EnemyAttacker : MonoBehaviour
     private bool _isRunner = false;
     private Coroutine _coroutine;
     private readonly int _attacked = Animator.StringToHash("Attacked");
-
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.TryGetComponent(out Player player) && _damage > 0)
+        if(collision.collider.TryGetComponent(out Health healthPlayer) && _damage > 0)
         { 
             _isRunner = true;
-            _coroutine = StartCoroutine(WaitForDamage(player));
+            _coroutine = StartCoroutine(WaitForDamage(healthPlayer));
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.TryGetComponent(out Player player) && _damage > 0)
+        if (collision.collider.TryGetComponent(out Health player) && _damage > 0)
         {
             if(_coroutine != null)
             _isRunner = false;
@@ -32,20 +32,20 @@ public class EnemyAttacker : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitForDamage(Player player)
+    private IEnumerator WaitForDamage(Health healthPlayer)
     {
         var wait = new WaitForSeconds(_delay);
 
         while(_isRunner)
         {
-            Attack(player);
+            Attack(healthPlayer);
             yield return wait;
         }
     }
 
-    private void Attack(Player player)
+    private void Attack(Health player)
     {
-        player.GetComponent<Health>().TakeDamage(_damage);
+        player.TakeDamage(_damage);
         _animator.SetTrigger(_attacked);
     }
 }

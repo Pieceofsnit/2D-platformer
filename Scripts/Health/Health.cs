@@ -15,6 +15,16 @@ public class Health: MonoBehaviour
         _maxValue = _value;
     }
 
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     public void TakeDamage(float damage)
     {
         ChangeHealth(- damage);

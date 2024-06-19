@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public class HealthPicker : MonoBehaviour
 {
     [SerializeField] private Health _healthPlayer;
     [SerializeField] private LayerMask _layerMaskEnemy;
+    [SerializeField] private KeyCode _stealHealth;
 
     private Collider2D _collider;
     private Coroutine _coroutine;
@@ -16,7 +18,8 @@ public class HealthPicker : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.R) && _isRunner == true)
+        Debug.Log(_isRunner);
+        if (Input.GetKey(_stealHealth) && _isRunner == true)
         {
             SelectNearestTarget();
         }
@@ -38,27 +41,28 @@ public class HealthPicker : MonoBehaviour
     {
         var wait = new WaitForSeconds(_delay);
         _isRunner = false;
+        
+            for (int i = 0; i < _duration; i++)
+            {
+                if(enemyHealth != null)
+                StealHealth(enemyHealth);
+                yield return wait;
+            }
 
-        for (int i = 0; i < _duration; i++)
-        {
-            StealHealth(enemyHealth);
-            yield return wait;
-        }
-
-        _isRunner = true;
+            _isRunner = true;
     }
 
     private void SelectNearestTarget()
     {
         _collider = Physics2D.OverlapCircle(transform.position, _radius, _layerMaskEnemy);
-
+        Debug.Log(_collider.TryGetComponent(out Health aaa));
         if (_collider.TryGetComponent(out Health enemyHealth))
         {
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
             }
-
+            
             _coroutine = StartCoroutine(WaitForStealHealth(enemyHealth));
         }
     }
@@ -67,5 +71,11 @@ public class HealthPicker : MonoBehaviour
     {
         enemyHealth.TakeDamage(_stolenHealth);
         _healthPlayer.Restore(_stolenHealth);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _radius);
     }
 }

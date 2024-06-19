@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
@@ -12,6 +11,9 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private Animator _animator;
+    [SerializeField] private KeyCode _goRight;
+    [SerializeField] private KeyCode _goLeft;
+    [SerializeField] private KeyCode _jump;
 
     private Rigidbody2D _rigidbody;
     private Vector2 _moveVector;
@@ -30,14 +32,14 @@ public class PlayerMover : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
+        if (Input.GetKey(_goRight) || Input.GetKey(_goLeft))
         {
             Rotate(_moveVector.x);
         }
         
         Run();
 
-        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
+        if (IsGrounded() && Input.GetKeyDown(_jump))
         {
             Jump();
         }

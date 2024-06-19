@@ -1,5 +1,7 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 [RequireComponent(typeof(Animator))]
 
@@ -11,6 +13,7 @@ public class PlayerAttacker : MonoBehaviour
     [SerializeField] private float _damage;
     [SerializeField] private float _delay = 1f;
     [SerializeField] private Animator _animator;
+    [SerializeField] private KeyCode _attackSword;
 
     private readonly int _attack = Animator.StringToHash("Attack");
     private Coroutine _coroutine;
@@ -18,7 +21,7 @@ public class PlayerAttacker : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.F) && _isRunner == true)
+        if (Input.GetKey(_attackSword) && _isRunner == true)
         {
             if(_coroutine != null)
             {
@@ -49,5 +52,10 @@ public class PlayerAttacker : MonoBehaviour
         yield return new WaitForSeconds(_delay);
         _isRunner = true;
         Attack();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, _range);
     }
 }
